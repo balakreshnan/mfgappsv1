@@ -43,6 +43,7 @@ def run(args: argparse.Namespace):
                 prompt += f"<|image_{i+1}|>\n"
 
             images = og.Images.open(*image_paths)
+            print("Images loaded")
 
         text = input("Prompt: ")
         prompt += f"{text}<|end|>\n<|assistant|>\n"
@@ -69,7 +70,7 @@ def run(args: argparse.Namespace):
         # Delete the generator to free the captured graph before creating another one
         del generator
 
-
+# python phi3v.py -m cpu-int4-rtn-block-32-acc-level-4
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(

@@ -21,4 +21,5 @@ matplotlib
 Pillow
 pyreadline3
 huggingface_hub
+onnxruntime
 onnxruntime-genai

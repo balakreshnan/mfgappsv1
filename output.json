@@ -1,7 +1,7 @@
 {
     "captionResult": {
         "text": "a label on a package",
-        "confidence": 0.7020233273506165
+        "confidence": 0.7041945457458496
     },
     "objectsResult": {
         "values": []
@@ -4537,7 +4537,7 @@
             },
             {
                 "text": "a green logo with a clover",
-                "confidence": 0.658929705619812,
+                "confidence": 0.6582359075546265,
                 "boundingBox": {
                     "x": 170,
                     "y": 173,
@@ -4547,7 +4547,7 @@
             },
             {
                 "text": "a purple letter on a white background",
-                "confidence": 0.7575313448905945,
+                "confidence": 0.757066547870636,
                 "boundingBox": {
                     "x": 275,
                     "y": 238,
@@ -4557,7 +4557,7 @@
             },
             {
                 "text": "a label of a mushroom",
-                "confidence": 0.6850454211235046,
+                "confidence": 0.6849882006645203,
                 "boundingBox": {
                     "x": 0,
                     "y": 0,
@@ -4567,7 +4567,7 @@
             },
             {
                 "text": "a bar code with black lines",
-                "confidence": 0.669489324092865,
+                "confidence": 0.669737696647644,
                 "boundingBox": {
                     "x": 541,
                     "y": 769,
@@ -4577,7 +4577,7 @@
             },
             {
                 "text": "a close-up of a label",
-                "confidence": 0.838764488697052,
+                "confidence": 0.8387527465820312,
                 "boundingBox": {
                     "x": 251,
                     "y": 127,
@@ -4587,7 +4587,7 @@
             },
             {
                 "text": "a white rectangular object with black text",
-                "confidence": 0.6212263703346252,
+                "confidence": 0.6217542886734009,
                 "boundingBox": {
                     "x": 179,
                     "y": 1168,
@@ -4607,7 +4607,7 @@
             },
             {
                 "text": "a close up of a logo",
-                "confidence": 0.768779993057251,
+                "confidence": 0.7683166861534119,
                 "boundingBox": {
                     "x": 660,
                     "y": 9,

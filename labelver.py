@@ -341,3 +341,4 @@ def labelverfication():
         #plt.axis('off')  
         #plt.show()  
         st.image(image, caption="Image with bounding boxes", use_column_width=True)
+        
