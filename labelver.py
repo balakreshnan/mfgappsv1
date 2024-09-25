@@ -69,10 +69,9 @@ def getrfptopictorespond(user_input1, selected_optionmodel1, pdf_bytes):
                 rfttext += f"### Page {page_num + 1}\n{text}\n\n"  # Accumulate text from each page
 
     message_text = [
-    {"role":"system", "content":f"""You are RFP and proposal expert AI Agent. Be politely, and provide positive tone answers.
-     extract the topics to respond back with details as bullet point only.
+    {"role":"system", "content":f"""You are Label verification expert AI Agent. Be politely, and provide positive tone answers.
      Only respond with high level topics and avoid details.
-     Here is the RFP text: {rfttext}
+     Here is the compliance text: {rfttext}
      If not sure, ask the user to provide more information."""}, 
     {"role": "user", "content": f"""{user_input1}. Extract the topics to respond back high level bullet point only."""}]
 
@@ -127,6 +126,7 @@ def processimage(base64_image, imgprompt):
     max_tokens=2000,
     temperature=0,
     top_p=1,
+    seed=105,
     )
 
     #print(response.choices[0].message.content)
@@ -139,15 +139,13 @@ def process_image(uploaded_file, selected_optionmodel, user_input):
         #image = Image.open(os.path.join(os.getcwd(),"temp.jpeg"))
         img_path = os.path.join(os.getcwd(), uploaded_file)
         # Open the image using PIL
-        #image_bytes = uploaded_file.read()
-        #image = Image.open(io.BytesIO(image_bytes))
 
         base64_image = encode_image(img_path)
         #base64_image = base64.b64encode(uploaded_file).decode('utf-8') #uploaded_image.convert('L')
-        imgprompt = f"""You are a Constructon drawing AutoCad Expert Agent. Analyze the image and find details for questions asked.
+        imgprompt = f"""You are a Label expert Expert Agent. Analyze the image and answer the question.
         Only answer from the data source provided.
-        Image has information about drawingsprovided.
-        can you extract details of this drawings.
+        Point out any missing specifications based on the label compliance document.
+        Also provide recommendation on any improvements we can do based on the label compliance document.
 
         Question:
         {user_input} 
@@ -203,10 +201,10 @@ def label_verify(docx_file, selected_optionmodel, imgfile, user_input="Compare t
         imgprompt = f"""You are a Label verification Expert Agent. Analyze the image and compare with label compliance document info.
         Only answer from the data source provided.
         Image has information about labels that goes in product or in manufacturing plant.
-        Point out any missing specifications.
-        Also provide recommendation on any improvements we can do.
+        Point out any missing specifications based on the label compliance document.
+        Also provide recommendation on any improvements we can do based on the label compliance document.
 
-        RFQ Text:
+        Label Compliance Docuement:
         {doctext}
 
         Question:
@@ -245,5 +243,5 @@ def labelverfication():
         st.image(imgfile, caption=f"Dunnes Stores", use_column_width=True)
     
     with col2:
-        labelver = label_verify(docfile, selected_optionmodel1, imgfile, "Compare the image with label specifications")
+        labelver = label_verify(docfile, selected_optionmodel1, imgfile, user_input)
         st.markdown(labelver, unsafe_allow_html=True)
