@@ -17,3 +17,8 @@ opencv-python
 ultralytics
 PyMuPDF
 python-docx
+matplotlib
+Pillow
+pyreadline3
+huggingface_hub
+onnxruntime-genai

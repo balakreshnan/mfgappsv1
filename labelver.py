@@ -21,6 +21,8 @@ import wave
 import PyPDF2
 import docx
 import fitz  # PyMuPDF
+from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
 
 config = dotenv_values("env.env")
 
@@ -182,6 +184,55 @@ def read_word_file(docx_file):
         full_text.append(paragraph.text)
     return '\n'.join(full_text)
 
+# Set up your Computer Vision subscription key and endpoint
+subscription_key = config["COMPUTER_VISION_KEY"]
+endpoint = config["COMPUTER_VISION_ENDPOINT"]
+
+def extractobjectsfromimage(imgfile, selected_optionmodel, user_input):
+    returntxt = ""
+
+    # Define the API version and URL for object detection
+    # analyze_url = endpoint + "vision/v4.0/analyze"
+    #analyze_url = endpoint + "/computervision/imageanalysis:analyze?api-version=2024-02-01&features=tags,read,caption,denseCaptions,smartCrops,objects,people"
+    analyze_url = endpoint + "/computervision/imageanalysis:analyze?api-version=2023-04-01-preview&features=tags,read,caption,denseCaptions,smartCrops,objects,people"
+
+    # Parameters for the request, specifying that we want to analyze objects
+    params = {
+        "visualFeatures": "Objects"
+    }
+
+    # Path to the local image
+    image_path = imgfile
+
+    # Headers for the API request, including the content type for binary data
+    headers = {
+        'Ocp-Apim-Subscription-Key': subscription_key,
+        'Content-Type': 'application/octet-stream'
+    }
+
+    # Read the image as binary data
+    with open(image_path, "rb") as image_data:
+        # Send the POST request to the Azure Computer Vision API
+        response = requests.post(analyze_url, headers=headers, params=params, data=image_data)
+        #response.raise_for_status()  # Raise exception if the call failed
+
+    # Parse the JSON response
+    analysis = response.json()
+    returntxt = json.dumps(analysis, indent=5)
+    #returntxt = analysis
+    #print(returntxt)
+
+    # Extract detected objects from the response
+    #if "objects" in analysis:
+    #    print("Objects detected in the image:")
+    #    for obj in analysis["objects"]:
+    #        print(f"Object: {obj['object']}, Confidence: {obj['confidence']:.2f}, "
+    #            f"Bounding Box: {obj['rectangle']}")
+    #else:
+    #    print("No objects detected.")
+
+    return returntxt
+
 def label_verify(docx_file, selected_optionmodel, imgfile, user_input="Compare the image with label specifications."):
     returntxt = ""
     doctext = ""
@@ -219,6 +270,16 @@ def label_verify(docx_file, selected_optionmodel, imgfile, user_input="Compare t
 
     return returntxt
 
+# Function to draw bounding boxes  
+def draw_text_bounding_boxes(draw, words):  
+    for word in words:  
+        box = word["boundingBox"]  
+        content = word["content"]  
+        # Draw lines between each point to form a box  
+        draw.polygon([(box[0], box[1]), (box[2], box[3]), (box[4], box[5]), (box[6], box[7])], outline="green", width=2)  
+        # Put text  
+        draw.text((box[0], box[1] - 10), content, fill="green")
+
 def labelverfication():
     count = 0
     temp_file_path = ""
@@ -245,3 +306,38 @@ def labelverfication():
     with col2:
         labelver = label_verify(docfile, selected_optionmodel1, imgfile, user_input)
         st.markdown(labelver, unsafe_allow_html=True)
+        imageinfo = extractobjectsfromimage(imgfile, selected_optionmodel1, user_input)
+        # st.json(imageinfo)
+        outputjson = json.loads(imageinfo)
+        
+        # Save JSON data to a file  
+        with open('output.json', 'w') as json_file:  
+            json.dump(outputjson, json_file, indent=4) 
+        image = Image.open(imgfile)
+        # Create a draw object
+        draw = ImageDraw.Draw(image)
+
+        # Draw bounding boxes  
+        for item in outputjson['denseCaptionsResult']['values']:  
+            box = item['boundingBox']  
+            text = item['text']  
+            draw.rectangle([box['x'], box['y'], box['x'] + box['w'], box['y'] + box['h']], outline="red", width=2)  
+            draw.text((box['x'], box['y']), text, fill="black")  
+
+        # Draw text from readResult  
+        #for block in outputjson['readResult']['blocks'][0]:  
+        #    for line in block['lines']:  
+        #        polygon = line['boundingPolygon']  
+        #        text = line['text']  
+        #        x = polygon[0]['x']  
+        #        y = polygon[0]['y']  
+        #        draw.text((x, y), text, fill="blue") 
+        words = outputjson["readResult"]["pages"][0]["words"] 
+        draw_text_bounding_boxes(draw, words)
+        
+        # https://onnxruntime.ai/docs/genai/tutorials/phi3-v.html#run-on-cpu
+        # Display the image  
+        #plt.imshow(image)  
+        #plt.axis('off')  
+        #plt.show()  
+        st.image(image, caption="Image with bounding boxes", use_column_width=True)
