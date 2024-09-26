@@ -286,19 +286,28 @@ def draw_text_bounding_boxes(draw, words):
         # Put text  
         draw.text((box[0], box[1] - 10), content, fill="green")
 
+#@st.cache_resource  # Cache the model to avoid reloading each time
+def load_model():
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True)
+    return model
+
 # Object detection function
 def detect_objects(image):
 
     st.write("Starting to load model...")
     #logging.info("Starting to load model...")
 
-    model_path = Path("yolov5s.pt")
+    #model_path = Path("yolov5s.pt")
     # Load the model
-    model = torch.load(model_path, map_location=torch.device('cpu'))  # Map to CPU if not using CUDA
+    # model = torch.load(model_path, map_location=torch.device('cpu'))  # Map to CPU if not using CUDA
+    # model = load_model()
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True)
 
     # If necessary, extract the model from the loaded dictionary (depends on how the model was saved)
-    if isinstance(model, dict) and 'model' in model:
-        model = model['model']
+    #if isinstance(model, dict) and 'model' in model:
+    #    model = model['model']
+
+    
 
     # Set the model to evaluation mode
     # model.eval()
@@ -384,8 +393,8 @@ def labelverfication():
         st.write("Image with bounding boxes")
         # Perform detection
         st.write("Running YOLOv5 inference...")
-        # detected_img, results = detect_objects(image)
+        #detected_img, results = detect_objects(image)
         
         # Display the image with detected objects
-        # st.image(detected_img, caption='Detected Objects', use_column_width=True)
+        #st.image(detected_img, caption='Detected Objects', use_column_width=True)
         
