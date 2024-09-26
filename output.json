@@ -1,7 +1,7 @@
 {
     "captionResult": {
         "text": "a label on a package",
-        "confidence": 0.7041945457458496
+        "confidence": 0.7020233273506165
     },
     "objectsResult": {
         "values": []
@@ -4517,7 +4517,7 @@
         "values": [
             {
                 "text": "a label on a package",
-                "confidence": 0.7041945457458496,
+                "confidence": 0.7020233273506165,
                 "boundingBox": {
                     "x": 0,
                     "y": 0,
@@ -4547,7 +4547,7 @@
             },
             {
                 "text": "a purple letter on a white background",
-                "confidence": 0.757066547870636,
+                "confidence": 0.7575313448905945,
                 "boundingBox": {
                     "x": 275,
                     "y": 238,
@@ -4577,7 +4577,7 @@
             },
             {
                 "text": "a close-up of a label",
-                "confidence": 0.8387527465820312,
+                "confidence": 0.838764488697052,
                 "boundingBox": {
                     "x": 251,
                     "y": 127,
@@ -4587,7 +4587,7 @@
             },
             {
                 "text": "a white rectangular object with black text",
-                "confidence": 0.6217542886734009,
+                "confidence": 0.6212263703346252,
                 "boundingBox": {
                     "x": 179,
                     "y": 1168,
@@ -4597,7 +4597,7 @@
             },
             {
                 "text": "a close up of a bar code",
-                "confidence": 0.8694669008255005,
+                "confidence": 0.8691423535346985,
                 "boundingBox": {
                     "x": 541,
                     "y": 371,

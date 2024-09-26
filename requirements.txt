@@ -23,3 +23,5 @@ pyreadline3
 huggingface_hub
 onnxruntime
 onnxruntime-genai
+torch
+torchvision
