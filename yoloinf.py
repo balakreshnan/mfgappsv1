@@ -27,8 +27,12 @@ import cv2
 import torch
 from pathlib import Path
 import numpy as np
+from ultralytics import YOLO
 
 
+cfg_model_path = 'yolov5s.pt'
+model = None
+confidence = .25
 
 config = dotenv_values("env.env")
 
@@ -60,113 +64,17 @@ SPEECH_ENDPOINT = config['SPEECH_ENDPOINT']
 
 citationtxt = ""
 
-#@st.cache_resource  # Cache the model to avoid reloading each time
-def load_model():
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True)
-    return model
+#https://docs.ultralytics.com/usage/python/ - training
+#https://docs.ultralytics.com/modes/predict/#plotting-results
+#https://docs.ultralytics.com/modes/predict/#boxes
 
-# Object detection function
-def detect_objects(image):
-
-    st.write("Starting to load model...")
-    #logging.info("Starting to load model...")
-    MODEL_PATH = os.getcwd() + "\\yolov5s.pt"
-
-    #model_path = Path("yolov5s.pt")
-    # Load the model
-    # model = torch.load(model_path, map_location=torch.device('cpu'))  # Map to CPU if not using CUDA
-    # model = load_model()
-    # 
-    # model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True)
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path=MODEL_PATH, force_reload=True)
-
-    # If necessary, extract the model from the loaded dictionary (depends on how the model was saved)
-    #if isinstance(model, dict) and 'model' in model:
-    #    model = model['model']
-
+# Load a model
+model = YOLO("yolov8n.pt")  # pretrained YOLOv8n model
     
-
-    # Set the model to evaluation mode
-    # model.eval()
-    st.write("Model loaded successfully!")
-    # Convert PIL image to a format YOLOv5 accepts
-    img = np.array(image)
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-    
-    # Perform inference using the YOLOv5 model
-    results = model(img)
-    
-    # Extract results and draw bounding boxes on the image
-    results.render()
-    
-    # Convert the result back to RGB for displaying in Streamlit
-    detected_img = Image.fromarray(results.ims[0])
-    
-    return detected_img, results.pandas().xyxy[0]  # Image with boxes and DataFrame with results
-
-# Function to load the YOLOv5 model from a .pt file
-def load_model1(model_path, device):
-    # Load the checkpoint or model file
-    checkpoint = torch.load(model_path, map_location=device)
-
-    # If it's a state_dict (OrderedDict), rebuild the YOLOv5 model architecture
-    if isinstance(checkpoint, dict) and 'model' in checkpoint:
-        model_config = checkpoint['model'].yaml  # YOLOv5 architecture (config) is stored in 'model'.yaml
-        model = Model(model_config).to(device)  # Create model from config
-        model.load_state_dict(checkpoint['model'].state_dict())  # Load model weights
-    else:
-        model = checkpoint  # Load the model directly if it's a model object
-
-    model = model.to(device)
-    model.eval()  # Set the model to evaluation mode
-    return model
-
-# Function to perform object detection
-def detect_objects1(image):
-
-    # MODEL_PATH = "path/to/yolov5s.pt"  # Update this with the actual path to your model
-    MODEL_PATH = os.getcwd() + "\\yolov5s.pt"
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'  # Use GPU if available, otherwise CPU
-
-    # Load the YOLOv5 model
-    # model = torch.load(MODEL_PATH, map_location=device)['model'].to(device)
-    # model.eval()  # Set the model to evaluation mode
-    # Load the model
-    model = load_model1(MODEL_PATH, device)
-    
-    # Convert PIL image to a numpy array
-    img = np.array(image)
-    
-    # Convert the numpy array to a PyTorch tensor and add batch dimension
-    img = torch.from_numpy(img).to(device).float()
-    img /= 255.0  # Normalize to [0, 1]
-    
-    if img.ndimension() == 3:
-        img = img.unsqueeze(0)
-
-    # Run YOLOv5 model inference
-    with torch.no_grad():
-        results = model(img)[0]
-
-    # Post-process the results to apply NMS (Non-Maximum Suppression)
-    # This step is crucial to filter out overlapping bounding boxes
-    from torchvision.ops import nms
-    conf_threshold = 0.25
-    iou_threshold = 0.45
-    boxes = results[:, :4]
-    scores = results[:, 4]
-    labels = results[:, 5]
-    
-    # Apply NMS
-    indices = nms(boxes, scores, iou_threshold)
-    results = results[indices]
-
-    # Convert the result image back to PIL for displaying in Streamlit
-    detected_img = Image.fromarray(np.array(image))
-    
-    return detected_img, results  # Detected image and results
-
 def yoloinf():
+    # global variables
+    global model, confidence, cfg_model_path
+
     count = 0
     temp_file_path = ""
     pdf_bytes = None
@@ -174,10 +82,20 @@ def yoloinf():
     rfplist = []
     #tab1, tab2, tab3, tab4 = st.tabs('RFP PDF', 'RFP Research', 'Draft', 'Create Word')
     modeloptions1 = ["gpt-4o-2", "gpt-4o-g", "gpt-4o", "gpt-4-turbo", "gpt-35-turbo"]
-    imgfile = "DunnesStoresImmuneClosedCups450gLabel.jpg"
+    # imgfile = "DunnesStoresImmuneClosedCups450gLabel.jpg"
     docfile = "LabelVerificationblank.docx"
+    imgfile = "bus.jpg"
 
+    # device options
+    if torch.cuda.is_available():
+        device_option = st.sidebar.radio("Select Device", ['cpu', 'cuda'], disabled=False, index=0)
+    else:
+        device_option = st.sidebar.radio("Select Device", ['cpu', 'cuda'], disabled=True, index=0)
 
+    # load model
+    #model = load_model(cfg_model_path, device_option)
+
+    #model.classes = list(model.names.keys())
 
     # Create a dropdown menu using selectbox method
     selected_optionmodel1 = st.selectbox("Select an Model:", modeloptions1)
@@ -186,9 +104,23 @@ def yoloinf():
     user_input = st.text_input("Enter the question to ask the AI model", "Compare the image with label specifications")
 
     image = Image.open(imgfile)
+    #img = image
 
     st.write("Running YOLOv5 inference...")
-    detected_img, results = detect_objects1(image)
-        
+    #detected_img, results = detect_objects1(image)
+
+    #image = convert_rgb_to_rgba(image)
+    print(f"Image mode: {image.mode}")
+
+    # Run inference
+    results = model(imgfile)  # return a list of Results objects
+    img = None
+    # Visualize the results
+    for i, r in enumerate(results):
+        # Plot results image
+        im_bgr = r.plot()  # BGR-order numpy array
+        im_rgb = Image.fromarray(im_bgr[..., ::-1])  # RGB-order PIL image
+        img = im_rgb
+            
     # Display the image with detected objects
-    st.image(detected_img, caption='Detected Objects', use_column_width=True)
+    st.image(img, caption='Detected Objects', use_column_width=True)

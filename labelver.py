@@ -27,8 +27,7 @@ import cv2
 import torch
 from pathlib import Path
 import numpy as np
-
-
+from ultralytics import YOLO
 
 config = dotenv_values("env.env")
 
@@ -286,47 +285,9 @@ def draw_text_bounding_boxes(draw, words):
         # Put text  
         draw.text((box[0], box[1] - 10), content, fill="green")
 
-#@st.cache_resource  # Cache the model to avoid reloading each time
-def load_model():
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True)
-    return model
-
-# Object detection function
-def detect_objects(image):
-
-    st.write("Starting to load model...")
-    #logging.info("Starting to load model...")
-
-    #model_path = Path("yolov5s.pt")
-    # Load the model
-    # model = torch.load(model_path, map_location=torch.device('cpu'))  # Map to CPU if not using CUDA
-    # model = load_model()
-    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, force_reload=True)
-
-    # If necessary, extract the model from the loaded dictionary (depends on how the model was saved)
-    #if isinstance(model, dict) and 'model' in model:
-    #    model = model['model']
-
-    
-
-    # Set the model to evaluation mode
-    # model.eval()
-    st.write("Model loaded successfully!")
-    # Convert PIL image to a format YOLOv5 accepts
-    img = np.array(image)
-    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-    
-    # Perform inference using the YOLOv5 model
-    results = model(img)
-    
-    # Extract results and draw bounding boxes on the image
-    results.render()
-    
-    # Convert the result back to RGB for displaying in Streamlit
-    detected_img = Image.fromarray(results.ims[0])
-    
-    return detected_img, results.pandas().xyxy[0]  # Image with boxes and DataFrame with results
-
+#
+# Load a model
+model = YOLO("yolov8n.pt")  # pretrained YOLOv8n model
 
 
 def labelverfication():
@@ -393,8 +354,16 @@ def labelverfication():
         st.write("Image with bounding boxes")
         # Perform detection
         st.write("Running YOLOv5 inference...")
-        #detected_img, results = detect_objects(image)
-        
+        # Run inference
+        results = model(imgfile)  # return a list of Results objects
+        img = None
+        # Visualize the results
+        for i, r in enumerate(results):
+            # Plot results image
+            im_bgr = r.plot()  # BGR-order numpy array
+            im_rgb = Image.fromarray(im_bgr[..., ::-1])  # RGB-order PIL image
+            img = im_rgb
+                
         # Display the image with detected objects
-        #st.image(detected_img, caption='Detected Objects', use_column_width=True)
+        st.image(img, caption='Detected Objects', use_column_width=True)
         
