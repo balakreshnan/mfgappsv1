@@ -4517,7 +4517,7 @@
         "values": [
             {
                 "text": "a label on a package",
-                "confidence": 0.7041945457458496,
+                "confidence": 0.7020233273506165,
                 "boundingBox": {
                     "x": 0,
                     "y": 0,
@@ -4527,7 +4527,7 @@
             },
             {
                 "text": "a purple sign with white text",
-                "confidence": 0.8167496919631958,
+                "confidence": 0.8179088234901428,
                 "boundingBox": {
                     "x": 261,
                     "y": 359,
@@ -4567,7 +4567,7 @@
             },
             {
                 "text": "a bar code with black lines",
-                "confidence": 0.669737696647644,
+                "confidence": 0.669489324092865,
                 "boundingBox": {
                     "x": 541,
                     "y": 769,
@@ -4587,7 +4587,7 @@
             },
             {
                 "text": "a white rectangular object with black text",
-                "confidence": 0.6217542886734009,
+                "confidence": 0.6212263703346252,
                 "boundingBox": {
                     "x": 179,
                     "y": 1168,
@@ -4607,7 +4607,7 @@
             },
             {
                 "text": "a close up of a logo",
-                "confidence": 0.7683166861534119,
+                "confidence": 0.768779993057251,
                 "boundingBox": {
                     "x": 660,
                     "y": 9,

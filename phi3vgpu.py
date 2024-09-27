@@ -77,8 +77,7 @@ def run(args: argparse.Namespace):
         # Delete the generator to free the captured graph before creating another one
         del generator
 
-#C:\Users\babal\AppData\Local\Temp\cuda
-# python phi3v.py -m cpu-int4-rtn-block-32-acc-level-4
+# python phi3vgpu.py -m cuda-int4-rtn-block-32 
 # C:\Code\gradioapps\mfgappsv1\images\DunnesStoresImmuneClosedCups450gLabel.jpg
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
