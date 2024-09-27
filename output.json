@@ -4517,7 +4517,7 @@
         "values": [
             {
                 "text": "a label on a package",
-                "confidence": 0.7020233273506165,
+                "confidence": 0.7041945457458496,
                 "boundingBox": {
                     "x": 0,
                     "y": 0,
@@ -4527,7 +4527,7 @@
             },
             {
                 "text": "a purple sign with white text",
-                "confidence": 0.8179088234901428,
+                "confidence": 0.8167496919631958,
                 "boundingBox": {
                     "x": 261,
                     "y": 359,
@@ -4547,7 +4547,7 @@
             },
             {
                 "text": "a purple letter on a white background",
-                "confidence": 0.7575313448905945,
+                "confidence": 0.757066547870636,
                 "boundingBox": {
                     "x": 275,
                     "y": 238,
@@ -4577,17 +4577,17 @@
             },
             {
                 "text": "a close-up of a label",
-                "confidence": 0.8365851640701294,
+                "confidence": 0.8387527465820312,
                 "boundingBox": {
                     "x": 251,
-                    "y": 128,
+                    "y": 127,
                     "w": 284,
-                    "h": 328
+                    "h": 329
                 }
             },
             {
                 "text": "a white rectangular object with black text",
-                "confidence": 0.6212263703346252,
+                "confidence": 0.6217542886734009,
                 "boundingBox": {
                     "x": 179,
                     "y": 1168,
@@ -4607,7 +4607,7 @@
             },
             {
                 "text": "a close up of a logo",
-                "confidence": 0.768779993057251,
+                "confidence": 0.7683166861534119,
                 "boundingBox": {
                     "x": 660,
                     "y": 9,
@@ -4630,19 +4630,19 @@
             },
             {
                 "name": "screenshot",
-                "confidence": 0.9466701745986938
+                "confidence": 0.9466700553894043
             },
             {
                 "name": "font",
-                "confidence": 0.9253343939781189
+                "confidence": 0.9253342151641846
             },
             {
                 "name": "printing",
-                "confidence": 0.8709829449653625
+                "confidence": 0.8709824085235596
             },
             {
                 "name": "design",
-                "confidence": 0.48157763481140137
+                "confidence": 0.48157691955566406
             }
         ]
     },
