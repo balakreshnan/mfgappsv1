@@ -2,6 +2,7 @@ import streamlit as st
 
 from labelver import labelverfication   
 from yoloinf import yoloinf
+from imgpdf import imgpdf
 
 # Set page size
 st.set_page_config(
@@ -25,6 +26,7 @@ st.sidebar.image("bblogo1.png", use_column_width=True)
 # Sidebar navigation
 nav_option = st.sidebar.selectbox("Navigation", ["Home", 
                                                  "Label Verification", "Yoloinf",
+                                                 "Imgpdf",
                                                  "Img3D","About"])
 
 # Display the selected page
@@ -32,6 +34,8 @@ if nav_option == "Label Verification":
     labelverfication()
 elif nav_option == "Label Verification":
     labelverfication()
+elif nav_option == "Imgpdf":    
+    imgpdf()
 elif nav_option == "Yoloinf":
     yoloinf()
 #elif nav_option == "VisionAgent":
