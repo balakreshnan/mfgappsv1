@@ -2,7 +2,7 @@ import streamlit as st
 
 from labelver import labelverfication   
 from yoloinf import yoloinf
-from imgpdf import imgpdf
+from imgpdf import pdf_asimage
 
 # Set page size
 st.set_page_config(
@@ -35,7 +35,7 @@ if nav_option == "Label Verification":
 elif nav_option == "Label Verification":
     labelverfication()
 elif nav_option == "Imgpdf":    
-    imgpdf()
+    pdf_asimage()
 elif nav_option == "Yoloinf":
     yoloinf()
 #elif nav_option == "VisionAgent":

@@ -72,9 +72,19 @@ def pdf_to_images(pdf_path, zoom=2.0):
 
     return images
 
+# Convert the PIL image to base64
+def encode_image_to_base64(pil_image):
+    buffer = io.BytesIO()
+    pil_image.save(buffer, format="PNG")
+    base64_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return base64_image
+
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
+    
+def encode_image_buffer(img):
+    return base64.b64encode(img.read()).decode('utf-8')
     
 def processimage(base64_image, imgprompt):
     response = client.chat.completions.create(
@@ -130,6 +140,36 @@ def process_image(uploaded_file, selected_optionmodel, user_input):
 
     return returntxt
 
+def process_image_img(img, selected_optionmodel, user_input):
+    returntxt = ""
+
+    if img is not None:
+        #image = Image.open(os.path.join(os.getcwd(),"temp.jpeg"))
+        # img_path = os.path.join(os.getcwd(), uploaded_file)
+        # Open the image using PIL
+        #image_bytes = uploaded_file.read()
+        #image = Image.open(io.BytesIO(image_bytes))
+
+        base64_image = encode_image_to_base64(img)
+        #base64_image = base64.b64encode(uploaded_file).decode('utf-8') #uploaded_image.convert('L')
+        imgprompt = f"""You are a image search AI Expert. Based on the question asked Analyze the image and find details.
+        Only answer from the data source provided.
+        can you extract details of this questions in image and provide.
+        respond as json format to say if the search query is found in image or not.
+        json format should be  search_query_found and value should be true or false.
+
+        Question:
+        {user_input} 
+        """
+
+        # Get the response from the model
+        result = processimage(base64_image, imgprompt)
+
+        #returntxt += f"Image uploaded: {uploaded_file.name}\n"
+        returntxt = result
+
+    return returntxt
+
 
 def pdf_asimage():
     count = 0
@@ -142,7 +182,29 @@ def pdf_asimage():
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        pdf_file = os.getcwd() + "\\pdf"
+
+        query = st.text_input("Enter your question", "show me failures for largest abrasive particle")
+
+        pdf_file = os.getcwd() + "\\pdf\\1E2500 - slide deck with sample photos of debris types (1).pdf"
         images = pdf_to_images(pdf_file, zoom=2.0)
         for i, img in enumerate(images):
             st.image(img, caption=f"Page {i+1}", use_column_width=True)
+    with col2:
+        if st.button("Search"):
+            imgcount = 1
+            for i, img in enumerate(images):
+                # img.save(f"temp{i}.jpeg")
+                #temp_file_path = f"temp{i}.jpeg"
+                rfpcontent = process_image_img(img, model_name, query)
+                #rfplist.append(rfpcontent)
+                print(rfpcontent)
+                count += 1
+                parsed_data = json.loads(rfpcontent.replace("`", "").replace("json", ""))
+                if parsed_data["search_query_found"]:
+                    st.image(img, caption=f"Page {i+1}", use_column_width=True)
+                    imgcount += 1
+
+                if imgcount == 5:
+                    break
+
+            #st.write(rfplist)
