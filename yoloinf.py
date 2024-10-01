@@ -69,7 +69,8 @@ citationtxt = ""
 #https://docs.ultralytics.com/modes/predict/#boxes
 
 # Load a model
-model = YOLO("yolov8n.pt")  # pretrained YOLOv8n model
+# model = YOLO("yolov8n.pt")  # pretrained YOLOv8n model
+model = YOLO("yolo11n.pt")
     
 def yoloinf():
     # global variables

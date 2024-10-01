@@ -287,7 +287,8 @@ def draw_text_bounding_boxes(draw, words):
 
 #
 # Load a model
-model = YOLO("yolov8n.pt")  # pretrained YOLOv8n model
+# model = YOLO("yolov8n.pt")  # pretrained YOLOv8n model
+model = YOLO("yolo11n.pt")
 
 
 def labelverfication():
