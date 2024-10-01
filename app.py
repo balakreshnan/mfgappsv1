@@ -4,6 +4,7 @@ from labelver import labelverfication
 from yoloinf import yoloinf
 from imgpdf import pdf_asimage
 from yolopdf  import loadpdf
+from pdftext import pdftext
 
 # Set page size
 st.set_page_config(
@@ -28,6 +29,7 @@ st.sidebar.image("bblogo1.png", use_column_width=True)
 nav_option = st.sidebar.selectbox("Navigation", ["Home", 
                                                  "Label Verification", "Yoloinf",
                                                  "Imgpdf", "pdfimage",
+                                                 "PdfText",
                                                  "Img3D","About"])
 
 # Display the selected page
@@ -41,6 +43,8 @@ elif nav_option == "Yoloinf":
     yoloinf()
 elif nav_option == "pdfimage":
     loadpdf()
+elif nav_option == "PdfText":
+    pdftext()
 #elif nav_option == "VisionAgent":
 #    vaprocess()
 
