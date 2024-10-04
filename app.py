@@ -6,6 +6,7 @@ from imgpdf import pdf_asimage
 from yolopdf  import loadpdf
 from pdftext import pdftext
 from yoloimage import yoloimage
+from TechnicianGPT import techniciangpt
 
 # Set page size
 st.set_page_config(
@@ -23,14 +24,15 @@ def load_css(file_path):
 # Call the function to load the CSS
 load_css("styles.css")
 
-st.logo("bblogo1.png")
-st.sidebar.image("bblogo1.png", use_column_width=True)
+st.logo("images/mfglogo.png")
+st.sidebar.image("images/mfglogo.png", use_column_width=True)
 
 # Sidebar navigation
 nav_option = st.sidebar.selectbox("Navigation", ["Home", 
                                                  "Label Verification", "Yoloinf",
                                                  "Imgpdf", "pdfimage",
                                                  "PdfText", "Yoloimage",
+                                                 "TechnicianGPT",
                                                  "Img3D","About"])
 
 # Display the selected page
@@ -48,6 +50,8 @@ elif nav_option == "PdfText":
     pdftext()
 elif nav_option == "Yoloimage":
     yoloimage()
+elif nav_option == "TechnicianGPT":
+    techniciangpt()
 #elif nav_option == "VisionAgent":
 #    vaprocess()
 
