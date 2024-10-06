@@ -257,7 +257,7 @@ def audio_to_item_create_event(audio_bytes: bytes) -> str:
             "role": "user",
             "content": [{
                 "type": "input_audio", 
-                "audio": encoded_chunk
+                "audio": pcm_base64
             }]
         }
     }

@@ -79,6 +79,8 @@ def run(args: argparse.Namespace):
 
 # python phi3vgpu.py -m cuda-int4-rtn-block-32 
 # C:\Code\gradioapps\mfgappsv1\images\DunnesStoresImmuneClosedCups450gLabel.jpg
+# C:\Code\gradioapps\mfgappsv1\images\highvisibility_blog_1200x628_8-1024x536.jpg
+# C:\Code\gradioapps\mfgappsv1\images\istockphoto-1332558192-612x612.jpg
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
