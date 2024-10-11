@@ -7,6 +7,8 @@ from yolopdf  import loadpdf
 from pdftext import pdftext
 from yoloimage import yoloimage
 from TechnicianGPT import techniciangpt
+from designworkbench import designworkbench
+from csirecipe import csirecipedesignmain
 
 # Set page size
 st.set_page_config(
@@ -32,7 +34,8 @@ nav_option = st.sidebar.selectbox("Navigation", ["Home",
                                                  "Label Verification", "Yoloinf",
                                                  "Imgpdf", "pdfimage",
                                                  "PdfText", "Yoloimage",
-                                                 "TechnicianGPT",
+                                                 "TechnicianGPT", "BusinessEnvision",
+                                                 "CSI Factory Recipe",
                                                  "Img3D","About"])
 
 # Display the selected page
@@ -52,6 +55,10 @@ elif nav_option == "Yoloimage":
     yoloimage()
 elif nav_option == "TechnicianGPT":
     techniciangpt()
+elif nav_option == "BusinessEnvision":
+    designworkbench()
+elif nav_option == "CSI Factory Recipe":
+    csirecipedesignmain()
 #elif nav_option == "VisionAgent":
 #    vaprocess()
 
