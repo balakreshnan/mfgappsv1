@@ -25,3 +25,4 @@ onnxruntime
 onnxruntime-genai
 torch
 torchvision
+qrcode[pil]

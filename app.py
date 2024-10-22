@@ -9,6 +9,7 @@ from yoloimage import yoloimage
 from TechnicianGPT import techniciangpt
 from designworkbench import designworkbench
 from csirecipe import csirecipedesignmain
+from qrcreator import qrcreator
 
 # Set page size
 st.set_page_config(
@@ -36,6 +37,7 @@ nav_option = st.sidebar.selectbox("Navigation", ["Home",
                                                  "PdfText", "Yoloimage",
                                                  "TechnicianGPT", "BusinessEnvision",
                                                  "CSI Factory Recipe",
+                                                 "QR Creator",
                                                  "Img3D","About"])
 
 # Display the selected page
@@ -59,6 +61,8 @@ elif nav_option == "BusinessEnvision":
     designworkbench()
 elif nav_option == "CSI Factory Recipe":
     csirecipedesignmain()
+elif nav_option == "QR Creator":
+    qrcreator()
 #elif nav_option == "VisionAgent":
 #    vaprocess()
 
